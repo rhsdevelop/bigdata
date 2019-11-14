@@ -407,8 +407,10 @@ def num_brasil(valor):
     acum = ''
     while not ts:
         num = milhar[-3:] + acum
+        print(num)
         if len(milhar) > 3:
             acum = '.' + milhar[-3:] + acum
+            print(acum)
             milhar = milhar[:-3]
         else:
             ts = 1

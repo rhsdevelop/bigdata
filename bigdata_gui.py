@@ -12,7 +12,6 @@ from tkinter.filedialog import askopenfilename
 from bigdata import CsvFile as Csv
 from gui import Application, Widgets, num_brasil, num_usa
 
-
 class Bigdata:
     def __init__(self, instance):
         '''
@@ -558,17 +557,27 @@ def otima_invalidos():
                 orcsv.csvfile.progresso = 0.0
                 for row in importarcomp:
                     orcsv.csvfile.progresso = (count / counts) * 100
-                    ati_return = Ati.consult_ati(row['Telefone'])
-                    if ati_return:
-                        if ati_return != ['55000', 'UNKNOWN']:
-                            lista_fill.append(
-                                {
-                                    'Telefone': row['Telefone'],
-                                    'RN1': ati_return[0],
-                                    'Operadora': ati_return[1],
-                                }
-                            )
-                            count += 1
+                    if row['DDD'] in ['92', '97']:
+                        lista_fill.append(
+                            {
+                                'Telefone': row['Telefone'],
+                                'RN1': 'Fixo',
+                                'Operadora': '',
+                            }
+                        )
+                        count += 1
+                    else:
+                        ati_return = Ati.consult_ati(row['Telefone'])
+                        if ati_return:
+                            if ati_return != ['55000', 'UNKNOWN']:
+                                lista_fill.append(
+                                    {
+                                        'Telefone': row['Telefone'],
+                                        'RN1': ati_return[0],
+                                        'Operadora': ati_return[1],
+                                    }
+                                )
+                    count += 1
                 writer.writerows(lista_fill)
             data_source.close()
             messagebox.showinfo(title='Aviso', message='Arquivo gerado com sucesso.\nForam analisados ' + str(count) + ' telefones.')
@@ -584,6 +593,9 @@ def otima_invalidos():
             5,
             187,
             273,
+            9,
+            296,
+            298
         ]
         gwids = [str(x) for x in gwids]
         gwid = 'in'
@@ -620,10 +632,10 @@ def otima_invalidos():
                             ddds[ddd] = 0
                         if ddds[ddd] < 100:
                             if ddd in ['92', '97']:
-                                if row['GWID'] not in ['653', '673', '674', '756', '786']:
+                                if row['GWID'] not in ['9', '296', '298']:
                                     continue
                             else:
-                                if len(row['Telefone']) <= 12:
+                                if len(row['Telefone']) < 12:
                                     continue
                             row_data = {}
                             for item in csvreader.fieldnames:
