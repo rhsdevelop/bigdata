@@ -1,2 +1,2 @@
 @echo off
-./Scripts/activate.bat
+C:\Users\user\Documents\bigdata_gui\codigo\Scripts\activate.bat
